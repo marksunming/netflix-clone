@@ -1,40 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import axios from './axios';
-const baseUrl = 'https://image.tmdb.org/t/p/original/';
+import React, { useState, useEffect } from "react";
+import axios from "./axios";
+import "./Row.css";
 
-function Row({ title, fetchUrl }) {
-    const [movies, setMovies] = useState([])
+const baseUrl = "https://image.tmdb.org/t/p/original/";
 
-    // A snippet of code which runs based on a specific condition
-    useEffect(() => {
-        async function fetchData() {
-            const request = await axios.get(fetchUrl);
-            console.log(request)
-            setMovies(request.data.results);
-            return request;
-        }
+function Row({ title, fetchUrl, islargeRow }) {
+  const [movies, setMovies] = useState([]);
 
-        fetchData();
+  // A snippet of code which runs based on a specific condition
+  useEffect(() => {
+    async function fetchData() {
+      const request = await axios.get(fetchUrl);
+      console.log(request);
+      setMovies(request.data.results);
+      return request;
+    }
 
-        // if [], run once when the row loads, and don't run again;
-    }, [fetchUrl])
+    fetchData();
 
-    console.log(movies)
-    return (
-        <div className="row">
-            <h2>{title}</h2>
+    // if [], run once when the row loads, and don't run again;
+  }, [fetchUrl]);
 
-            <div className="rwo_posters">
-                {/* several row__poster */}
+  console.log(movies);
+  return (
+    <div className="row">
+      <h2>{title}</h2>
 
-                {movies.map(movie => (
-                    <img src={`${baseUrl}${movie.poster_path}`} alt={movie.name} />
-                ))}
+      <div className="row_posters">
+        {/* several row__poster */}
 
-            </div>
-            {/* container => posters */}
-        </div>
-    )
+        {movies.map((movie) => (
+          <img
+            key={movie.id}
+            className={`row__poster ${islargeRow && "row__posterLarge"}`}
+            src={`${baseUrl}${
+              islargeRow ? movie.poster_path : movie.backdrop_path
+            }`}
+            alt={movie.name}
+          />
+        ))}
+      </div>
+      {/* container => posters */}
+    </div>
+  );
 }
 
-export default Row
+export default Row;
